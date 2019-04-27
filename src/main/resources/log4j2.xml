@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="OFF" packages="org.apache.logging.log4j.core,io.sentry.log4j2">
+<configuration status="OFF" packages="org.apache.logging.log4j.core">
     <appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%highlight{%-5level} [%c{1}%X{id}] - %m{ansi}%n"/>

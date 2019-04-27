@@ -72,7 +72,7 @@ public class FurniRipper {
     }
 
     private void downloadFurni(FurniData furniData) {
-        System.out.println("Downloading room items and wall items.");
+        this.logger.info("Downloading room items and wall items.");
 
         List<FurniType> mergedFurnis = Stream.concat(furniData.getRoomItems().stream(), furniData.getWallItems().stream())
                 .collect(Collectors.toList());
