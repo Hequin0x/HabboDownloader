@@ -1,6 +1,7 @@
 package com.sulgaming.habbodownloader.process;
 
 import com.sulgaming.habbodownloader.model.FigureMap;
+import com.sulgaming.habbodownloader.util.Habbo;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +27,8 @@ public class FigureRipper {
 
     private final File figureMap;
 
+    private String currentRevision;
+
     public FigureRipper(boolean overwrite) {
         this.figureDirectoryName = "figure";
         this.downloadedCount = new AtomicInteger(0);
@@ -37,11 +40,15 @@ public class FigureRipper {
         this.figureMap = new File(String.format("%s/figuremap.xml", this.figureDirectoryName));
     }
 
-    public void start() throws IOException, JAXBException {
+    public void start() throws Exception {
         this.logger.info("Starting the gordon ripping :)");
 
+        this.currentRevision = Habbo.getCurrentRevision();
+
+        this.logger.info(String.format("Current Revision: %s", this.currentRevision));
+
         this.createGordonFolder();
-        this.downloadRequiredFiles();
+        this.downloadFigureMap();
 
         FigureMap figureMap = this.parseFigureMap();
 
@@ -59,10 +66,10 @@ public class FigureRipper {
         }
     }
 
-    private void downloadRequiredFiles() throws IOException {
+    private void downloadFigureMap() throws IOException {
         this.logger.info("Downloading required files...");
 
-        FileUtils.copyURLToFile(new URL("https://images.habbo.com/gordon/PRODUCTION-201904222208-183436269/figuremap.xml"), this.figureMap);
+        FileUtils.copyURLToFile(new URL(String.format("https://images.habbo.com/gordon/%s/figuremap.xml", this.currentRevision)), this.figureMap);
     }
 
     private FigureMap parseFigureMap() throws JAXBException {
@@ -93,7 +100,7 @@ public class FigureRipper {
                 try {
                     this.logger.info("Downloading figure {}...", id);
 
-                    FileUtils.copyURLToFile(new URL(String.format("https://images.habbo.com/gordon/PRODUCTION-201904222208-183436269/%s.swf", id)), figure);
+                    FileUtils.copyURLToFile(new URL(String.format("https://images.habbo.com/gordon/%s/%s.swf", this.currentRevision, id)), figure);
 
                     this.downloadedCount.incrementAndGet();
                 } catch (IOException e) {
