@@ -3,6 +3,8 @@ package com.sulgaming.habbodownloader.process;
 import com.sulgaming.habbodownloader.model.FurniData;
 import com.sulgaming.habbodownloader.model.FurniType;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FurniRipper {
+    private final Logger logger = LogManager.getLogger(FurniRipper.class);
 
     private final String furniDirectoryName;
     private final AtomicInteger downloadedCount;
@@ -35,7 +38,7 @@ public class FurniRipper {
     }
 
     public void start() throws IOException, JAXBException {
-        System.out.println("Starting the furni ripping :)");
+        this.logger.info("Starting the furni ripping :)");
 
         this.createFurniFolder();
 
@@ -43,8 +46,8 @@ public class FurniRipper {
 
         this.downloadFurni(furniData);
 
-        System.out.println(String.format("Completed! %d furni downloaded, %d furni already existed, %d furni failed to download.",
-                this.downloadedCount.get(), this.skippedCount.get(), this.failedCount.get()));
+        this.logger.info("Completed! {} furni downloaded, {} furni already existed, {} furni failed to download.",
+                this.downloadedCount.get(), this.skippedCount.get(), this.failedCount.get());
     }
 
     private void createFurniFolder() {
@@ -63,7 +66,7 @@ public class FurniRipper {
 
         FurniData furniData = (FurniData) unMarshaller.unmarshal(furniDataUrl);
 
-        System.out.println(String.format("Found %d room items and %d wall items.", furniData.getRoomItems().size(), furniData.getWallItems().size()));
+        this.logger.info("Found {} room items and {} wall items.", furniData.getRoomItems().size(), furniData.getWallItems().size());
 
         return furniData;
     }
@@ -84,10 +87,10 @@ public class FurniRipper {
             if(furni.exists()) {
                 this.skippedCount.incrementAndGet();
 
-                System.out.println(String.format("Furni %s already exist, skipped it.", className));
+                this.logger.info("Furni {} already exist, skipped it.", className);
             } else {
                 try {
-                    System.out.println(String.format("Downloading furni %s...", className));
+                    this.logger.info("Downloading furni {}...", className);
 
                     FileUtils.copyURLToFile(new URL(String.format("https://images.habbo.com/dcr/hof_furni/%d/%s.swf", revision, className)), furni);
 
@@ -96,11 +99,11 @@ public class FurniRipper {
                     this.failedCount.incrementAndGet();
 
                     if(e instanceof FileNotFoundException) {
-                        System.out.println(String.format("Failed to download furni %s because is unavailable.", className));
+                        this.logger.warn("Failed to download furni {} because is unavailable.", className);
                         return;
                     }
 
-                    e.printStackTrace();
+                    this.logger.error(e);
                 }
             }
         });
