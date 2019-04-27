@@ -2,6 +2,8 @@
 
 Habbo downloader is a tool written in Java for downloading habbo files (only furni for now).
 
+**Note: it require JDK 12**
+
 #### How to use it
 * For downloading all furni:
 ~~~~

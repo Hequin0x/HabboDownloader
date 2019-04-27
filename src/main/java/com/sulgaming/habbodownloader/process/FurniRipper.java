@@ -29,7 +29,7 @@ public class FurniRipper {
     private final boolean withoutRevision;
 
     public FurniRipper(boolean withoutRevision) {
-        this.furniDirectoryName = "furni";
+        this.furniDirectoryName = "hof_furni";
         this.downloadedCount = new AtomicInteger(0);
         this.skippedCount = new AtomicInteger(0);
         this.failedCount = new AtomicInteger(0);
