@@ -2,6 +2,7 @@ package com.sulgaming.habbodownloader;
 
 import com.beust.jcommander.JCommander;
 import com.sulgaming.habbodownloader.process.FurniRipper;
+import com.sulgaming.habbodownloader.process.FigureRipper;
 
 public class Application {
 
@@ -11,7 +12,9 @@ public class Application {
         JCommander.newBuilder().addObject(arguments).build().parse(args);
 
         if(arguments.furni) {
-            new FurniRipper(arguments.withoutRevision).start();
+            new FurniRipper(arguments.withoutRevision, arguments.overwrite).start();
+        } else if(arguments.figure) {
+            new FigureRipper(arguments.overwrite).start();
         }
     }
 }

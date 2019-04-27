@@ -27,14 +27,16 @@ public class FurniRipper {
     private final AtomicInteger failedCount;
 
     private final boolean withoutRevision;
+    private final boolean overwrite;
 
-    public FurniRipper(boolean withoutRevision) {
+    public FurniRipper(boolean withoutRevision, boolean overwrite) {
         this.furniDirectoryName = "hof_furni";
         this.downloadedCount = new AtomicInteger(0);
         this.skippedCount = new AtomicInteger(0);
         this.failedCount = new AtomicInteger(0);
 
         this.withoutRevision = withoutRevision;
+        this.overwrite = overwrite;
     }
 
     public void start() throws IOException, JAXBException {
@@ -59,6 +61,8 @@ public class FurniRipper {
     }
 
     private FurniData parseFurniData() throws IOException, JAXBException {
+        this.logger.info("Parsing furni data file...");
+
         URL furniDataUrl = new URL("https://www.habbo.com/gamedata/furnidata_xml/0");
 
         JAXBContext jaxbContext = JAXBContext.newInstance(FurniData.class);
@@ -84,9 +88,8 @@ public class FurniRipper {
             File furni = !withoutRevision ? new File(String.format("%s/%d/%s.swf", this.furniDirectoryName, revision, className)) :
                     new File(String.format("%s/%s.swf", this.furniDirectoryName, className));
 
-            if(furni.exists()) {
+            if(furni.exists() && !this.overwrite) {
                 this.skippedCount.incrementAndGet();
-
                 this.logger.info("Furni {} already exist, skipped it.", className);
             } else {
                 try {
