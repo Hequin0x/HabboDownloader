@@ -39,7 +39,7 @@ public class FurniRipper {
 
         this.createFurniFolder();
 
-        final FurniData furniData = parseFurniData();
+        final FurniData furniData = this.parseFurniData();
 
         this.downloadFurni(furniData);
 
