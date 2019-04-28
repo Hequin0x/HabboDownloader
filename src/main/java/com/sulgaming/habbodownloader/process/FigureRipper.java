@@ -41,13 +41,13 @@ public class FigureRipper {
     }
 
     public void start() throws Exception {
-        this.logger.info("Starting the gordon ripping :)");
+        this.logger.info("Starting the figure ripping :)");
 
         this.currentRevision = Habbo.getCurrentRevision();
 
         this.logger.info(String.format("Current Revision: %s", this.currentRevision));
 
-        this.createGordonFolder();
+        this.createFigureFolder();
         this.downloadFigureMap();
 
         FigureMap figureMap = this.parseFigureMap();
@@ -58,7 +58,7 @@ public class FigureRipper {
                 this.downloadedCount.get(), this.skippedCount.get(), this.failedCount.get());
     }
 
-    private void createGordonFolder() {
+    private void createFigureFolder() {
         File figureDirectory = new File(this.figureDirectoryName);
 
         if(!figureDirectory.exists()) {
