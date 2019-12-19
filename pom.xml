@@ -6,7 +6,7 @@
 
     <groupId>fr.hequin0x</groupId>
     <artifactId>habbo-downloader</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <properties>
         <log4j2.version>2.13.0</log4j2.version>
@@ -71,14 +71,6 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/Hequin0x/HabboDownloader</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <testSourceDirectory>src/test</testSourceDirectory>
