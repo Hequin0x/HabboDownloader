@@ -72,6 +72,14 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Hequin0x/HabboDownloader</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <testSourceDirectory>src/test</testSourceDirectory>
         <plugins>
