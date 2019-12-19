@@ -1,4 +1,4 @@
-package com.sulgaming.habbodownloader.util;
+package fr.hequin0x.habbodownloader.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

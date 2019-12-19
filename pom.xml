@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.sulgaming</groupId>
+    <groupId>fr.hequin0x</groupId>
     <artifactId>habbo-downloader</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <log4j2.version>2.11.2</log4j2.version>
+        <log4j2.version>2.13.0</log4j2.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>12</maven.compiler.target>
         <maven.compiler.source>12</maven.compiler.source>
@@ -31,12 +31,17 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <version>2.6</version>
         </dependency>
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
-            <version>1.72</version>
+            <version>1.78</version>
+        </dependency>
+        <dependency>
+            <groupId>me.tongfei</groupId>
+            <artifactId>progressbar</artifactId>
+            <version>0.7.4</version>
         </dependency>
         <!-- Logging -->
         <dependency>
@@ -73,7 +78,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.ow2.asm</groupId>
@@ -96,7 +101,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.sulgaming.habbodownloader.Application</mainClass>
+                                    <mainClass>fr.hequin0x.habbodownloader.Application</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

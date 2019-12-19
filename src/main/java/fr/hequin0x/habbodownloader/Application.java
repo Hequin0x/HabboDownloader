@@ -1,9 +1,9 @@
-package com.sulgaming.habbodownloader;
+package fr.hequin0x.habbodownloader;
 
 import com.beust.jcommander.JCommander;
-import com.sulgaming.habbodownloader.process.EffectRipper;
-import com.sulgaming.habbodownloader.process.FurniRipper;
-import com.sulgaming.habbodownloader.process.FigureRipper;
+import fr.hequin0x.habbodownloader.process.EffectRipper;
+import fr.hequin0x.habbodownloader.process.FurniRipper;
+import fr.hequin0x.habbodownloader.process.FigureRipper;
 
 public class Application {
 

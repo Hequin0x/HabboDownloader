@@ -6,7 +6,7 @@
         </Console>
     </appenders>
     <loggers>
-        <Logger name="com.sulgaming" level="INFO"/>
+        <Logger name="fr.hequin0x" level="INFO"/>
         <asyncRoot level="WARN">
             <AppenderRef ref="Console"/>
         </asyncRoot>

@@ -1,4 +1,4 @@
-package com.sulgaming.habbodownloader.model;
+package fr.hequin0x.habbodownloader.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;

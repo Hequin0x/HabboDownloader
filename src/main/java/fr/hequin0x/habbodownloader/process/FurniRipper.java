@@ -1,7 +1,8 @@
-package com.sulgaming.habbodownloader.process;
+package fr.hequin0x.habbodownloader.process;
 
-import com.sulgaming.habbodownloader.model.FurniData;
-import com.sulgaming.habbodownloader.model.FurniType;
+import fr.hequin0x.habbodownloader.model.FurniData;
+import fr.hequin0x.habbodownloader.model.FurniType;
+import me.tongfei.progressbar.ProgressBar;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -81,34 +82,39 @@ public class FurniRipper {
         List<FurniType> mergedFurnis = Stream.concat(furniData.getRoomItems().stream(), furniData.getWallItems().stream())
                 .collect(Collectors.toList());
 
-        mergedFurnis.parallelStream().forEach((furniType) -> {
-            int revision = furniType.getRevision();
-            String className = furniType.getClassName();
+        try (ProgressBar pb = new ProgressBar("Furnis download", mergedFurnis.size())) {
 
-            File furni = !withoutRevision ? new File(String.format("%s/%d/%s.swf", this.furniDirectoryName, revision, className)) :
-                    new File(String.format("%s/%s.swf", this.furniDirectoryName, className));
+            mergedFurnis.parallelStream().forEach((furniType) -> {
+                pb.step();
 
-            if(furni.exists() && !this.overwrite) {
-                this.skippedCount.incrementAndGet();
-                this.logger.info("Furni {} already exist, skipped it.", className);
-            } else {
-                try {
-                    this.logger.info("Downloading furni {}...", className);
+                int revision = furniType.getRevision();
+                String className = furniType.getClassName();
 
-                    FileUtils.copyURLToFile(new URL(String.format("https://images.habbo.com/dcr/hof_furni/%d/%s.swf", revision, className)), furni);
+                File furni = !withoutRevision ? new File(String.format("%s/%d/%s.swf", this.furniDirectoryName, revision, className)) :
+                        new File(String.format("%s/%s.swf", this.furniDirectoryName, className));
 
-                    this.downloadedCount.incrementAndGet();
-                } catch (IOException e) {
-                    this.failedCount.incrementAndGet();
+                if (furni.exists() && !this.overwrite) {
+                    this.skippedCount.incrementAndGet();
+                    this.logger.info("Furni {} already exist, skipped it.", className);
+                } else {
+                    try {
+                        //this.logger.info("Downloading furni {}...", className);
 
-                    if(e instanceof FileNotFoundException) {
-                        this.logger.warn("Failed to download furni {} because is unavailable.", className);
-                        return;
+                        FileUtils.copyURLToFile(new URL(String.format("https://images.habbo.com/dcr/hof_furni/%d/%s.swf", revision, className)), furni);
+
+                        this.downloadedCount.incrementAndGet();
+                    } catch (IOException e) {
+                        this.failedCount.incrementAndGet();
+
+                        if (e instanceof FileNotFoundException) {
+                            //this.logger.warn("Failed to download furni {} because is unavailable.", className);
+                            return;
+                        }
+
+                        this.logger.error(e);
                     }
-
-                    this.logger.error(e);
                 }
-            }
-        });
+            });
+        }
     }
 }

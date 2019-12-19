@@ -1,7 +1,8 @@
-package com.sulgaming.habbodownloader.process;
+package fr.hequin0x.habbodownloader.process;
 
-import com.sulgaming.habbodownloader.model.EffectMap;
-import com.sulgaming.habbodownloader.util.Habbo;
+import fr.hequin0x.habbodownloader.model.EffectMap;
+import fr.hequin0x.habbodownloader.util.Habbo;
+import me.tongfei.progressbar.ProgressBar;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,33 +89,37 @@ public class EffectRipper {
     private void downloadEffectLibs(EffectMap effectMap) {
         this.logger.info("Downloading effects...");
 
-        effectMap.getEffectLibs().parallelStream().forEach((effectLib) -> {
-            String lib = effectLib.getLib();
+        try (ProgressBar pb = new ProgressBar("Effects download", effectMap.getEffectLibs().size())) {
 
-            File effect = new File(String.format("%s/%s.swf", this.effectDirectoryName, lib));
+            effectMap.getEffectLibs().parallelStream().forEach((effectLib) -> {
+                pb.step();
 
-            if(effect.exists() && !this.overwrite) {
-                this.skippedCount.incrementAndGet();
-                this.logger.info("Effect {} already exist, skipped it.", lib);
-            } else {
-                try {
-                    this.logger.info("Downloading effect {}...", lib);
+                String lib = effectLib.getLib();
 
-                    FileUtils.copyURLToFile(new URL(String.format("https://images.habbo.com/gordon/%s/%s.swf", this.currentRevision, lib)), effect);
+                File effect = new File(String.format("%s/%s.swf", this.effectDirectoryName, lib));
 
-                    this.downloadedCount.incrementAndGet();
-                } catch (IOException e) {
-                    this.failedCount.incrementAndGet();
+                if (effect.exists() && !this.overwrite) {
+                    this.skippedCount.incrementAndGet();
+                    this.logger.info("Effect {} already exist, skipped it.", lib);
+                } else {
+                    try {
+                        //this.logger.info("Downloading effect {}...", lib);
 
-                    if(e instanceof FileNotFoundException) {
-                        this.logger.warn("Failed to download effect {} because is unavailable.", lib);
-                        return;
+                        FileUtils.copyURLToFile(new URL(String.format("https://images.habbo.com/gordon/%s/%s.swf", this.currentRevision, lib)), effect);
+
+                        this.downloadedCount.incrementAndGet();
+                    } catch (IOException e) {
+                        this.failedCount.incrementAndGet();
+
+                        if (e instanceof FileNotFoundException) {
+                            //this.logger.warn("Failed to download effect {} because is unavailable.", lib);
+                            return;
+                        }
+
+                        this.logger.error(e);
                     }
-
-                    this.logger.error(e);
                 }
-            }
-        });
-
+            });
+        }
     }
 }

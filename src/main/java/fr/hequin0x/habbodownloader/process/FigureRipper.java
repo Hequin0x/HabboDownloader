@@ -1,7 +1,8 @@
-package com.sulgaming.habbodownloader.process;
+package fr.hequin0x.habbodownloader.process;
 
-import com.sulgaming.habbodownloader.model.FigureMap;
-import com.sulgaming.habbodownloader.util.Habbo;
+import fr.hequin0x.habbodownloader.model.FigureMap;
+import fr.hequin0x.habbodownloader.util.Habbo;
+import me.tongfei.progressbar.ProgressBar;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,33 +89,37 @@ public class FigureRipper {
     private void downloadFigureLibs(FigureMap figureMap) {
         this.logger.info("Downloading figures...");
 
-        figureMap.getFigureLibs().parallelStream().forEach((figureLib) -> {
-            String id = figureLib.getId();
+        try (ProgressBar pb = new ProgressBar("Figure download", figureMap.getFigureLibs().size())) {
 
-            File figure = new File(String.format("%s/%s.swf", this.figureDirectoryName, id));
+            figureMap.getFigureLibs().parallelStream().forEach((figureLib) -> {
+                pb.step();
 
-            if(figure.exists() && !this.overwrite) {
-                this.skippedCount.incrementAndGet();
-                this.logger.info("Figure {} already exist, skipped it.", id);
-            } else {
-                try {
-                    this.logger.info("Downloading figure {}...", id);
+                String id = figureLib.getId();
 
-                    FileUtils.copyURLToFile(new URL(String.format("https://images.habbo.com/gordon/%s/%s.swf", this.currentRevision, id)), figure);
+                File figure = new File(String.format("%s/%s.swf", this.figureDirectoryName, id));
 
-                    this.downloadedCount.incrementAndGet();
-                } catch (IOException e) {
-                    this.failedCount.incrementAndGet();
+                if (figure.exists() && !this.overwrite) {
+                    this.skippedCount.incrementAndGet();
+                    this.logger.info("Figure {} already exist, skipped it.", id);
+                } else {
+                    try {
+                        //this.logger.info("Downloading figure {}...", id);
 
-                    if(e instanceof FileNotFoundException) {
-                        this.logger.warn("Failed to download figure {} because is unavailable.", id);
-                        return;
+                        FileUtils.copyURLToFile(new URL(String.format("https://images.habbo.com/gordon/%s/%s.swf", this.currentRevision, id)), figure);
+
+                        this.downloadedCount.incrementAndGet();
+                    } catch (IOException e) {
+                        this.failedCount.incrementAndGet();
+
+                        if (e instanceof FileNotFoundException) {
+                            //this.logger.warn("Failed to download figure {} because is unavailable.", id);
+                            return;
+                        }
+
+                        this.logger.error(e);
                     }
-
-                    this.logger.error(e);
                 }
-            }
-        });
-
+            });
+        }
     }
 }

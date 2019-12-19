@@ -1,4 +1,4 @@
-package com.sulgaming.habbodownloader;
+package fr.hequin0x.habbodownloader;
 
 import com.beust.jcommander.Parameter;
 
