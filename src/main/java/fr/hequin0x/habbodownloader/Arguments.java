@@ -13,6 +13,9 @@ public class Arguments {
     @Parameter(names = "-effect", description = "Download effect files")
     public boolean effect = false;
 
+    @Parameter(names = "-badge", description = "Download badge files")
+    public boolean badge = false;
+
     @Parameter(names = "-without-revision" , description = "Should create revision folders or not")
     public boolean withoutRevision = false;
 

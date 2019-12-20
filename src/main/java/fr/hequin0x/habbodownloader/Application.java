@@ -1,6 +1,7 @@
 package fr.hequin0x.habbodownloader;
 
 import com.beust.jcommander.JCommander;
+import fr.hequin0x.habbodownloader.process.BadgeRipper;
 import fr.hequin0x.habbodownloader.process.EffectRipper;
 import fr.hequin0x.habbodownloader.process.FurniRipper;
 import fr.hequin0x.habbodownloader.process.FigureRipper;
@@ -18,6 +19,8 @@ public class Application {
             new FigureRipper(arguments.overwrite).start();
         } else if(arguments.effect) {
             new EffectRipper(arguments.overwrite).start();
+        } else if(arguments.badge) {
+            new BadgeRipper().start();
         }
     }
 }
